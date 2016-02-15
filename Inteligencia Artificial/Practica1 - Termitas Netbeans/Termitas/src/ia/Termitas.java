@@ -84,9 +84,9 @@ public class Termitas extends PApplet {
         text("Proporcion de astillas: " + densidad, 128, (alto*celda)+24);
 
         // Actualizar el modelo a la siguiente generacion.
-        modelo.evolucion1();
+        //modelo.evolucion1();
         //modelo.evolucion2();
-        //modelo.evolucion3();
+        modelo.evolucion3();
     }
     
     
@@ -240,9 +240,14 @@ public class Termitas extends PApplet {
       */
       int direccionAleatoriaFrente(int direccion){
         // ##### IMPLEMENTACION #####
+        //System.out.println("primero mira hacia "+ direccion);
+        int ndir = rnd.nextInt(3);
+        ndir = (direccion - (ndir -1))%8;
+        if(ndir < 0) ndir += 8;
+        //System.out.println("luego mira hacia "+ ndir);
+        return ndir;
         // Ejemplo: Si recibes de parametro el valor '3' significa que la termita está mirando hacia la derecha
         //    por lo que puede caminar aleatoriamente hacia los valores 2, 3 ó 4 (representando izquierda, adelante y derecha).
-        return rnd.nextInt(8);
       }
 
       /** Determina si la casilla en la direccion en la que se mueve la termita contiene una astilla.
@@ -305,6 +310,9 @@ public class Termitas extends PApplet {
       */
       void dejarAstilla(Termita t, int dir){
         // ##### IMPLEMENTACION #####
+        mundo[t.posY][t.posX].estado = true;
+        t.cargando = false;
+        this.moverTermita(t, (t.direccion+4)%8);
         // Hint: Indicar en el mundo que hay una astilla, indicar a la termita que está cargando una astilla y mover a la termita
         //    en la direccion opuesta a la que está mirando (variable 'dir')
       }
@@ -326,6 +334,30 @@ public class Termitas extends PApplet {
         @param t La termita que va a soltar astilla en el modelo.
       */
       void dejarAstillaConSalto(Termita t){
+        mundo[t.posY][t.posX].estado = true;
+        t.cargando = false;
+        int n = rnd.nextInt(2);
+        
+        if(n == 0){
+            if(hayAstilla(t,3)==false) this.moverTermita(t, 3);
+            else if(hayAstilla(t,5)==false) this.moverTermita(t, 5);
+            else if(hayAstilla(t,4)==false) this.moverTermita(t, 4);
+            else if(hayAstilla(t,6)==false) this.moverTermita(t, 6);
+            else if(hayAstilla(t,2)==false) this.moverTermita(t, 2);
+            else if(hayAstilla(t,7)==false) this.moverTermita(t, 7);
+            else if(hayAstilla(t,1)==false) this.moverTermita(t, 1);
+            else if(hayAstilla(t,0)==false) this.moverTermita(t, 0);
+        } else {
+            if(hayAstilla(t,7)==false) this.moverTermita(t, 7);
+            else if(hayAstilla(t,0)==false) this.moverTermita(t, 0);
+            else if(hayAstilla(t,2)==false) this.moverTermita(t, 2);
+            else if(hayAstilla(t,1)==false) this.moverTermita(t, 1);
+            else if(hayAstilla(t,3)==false) this.moverTermita(t, 3);
+            else if(hayAstilla(t,6)==false) this.moverTermita(t, 6);
+            else if(hayAstilla(t,4)==false) this.moverTermita(t, 4);
+            else if(hayAstilla(t,5)==false) this.moverTermita(t, 5);
+        }        
+        
         // ##### IMPLEMENTACION #####
         // Hint: MArcar casilla con astilla, indicar que la termina ya no carga una astilla y asignar una nueva posicion a la termita.
       }
