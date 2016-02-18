@@ -23,10 +23,8 @@ public class Termitas extends PApplet {
     // Propiedades del modelo de termitas.
     int alto = 100;         // Altura (en celdas) de la cuadricula.
     int ancho = 150;        // Anchura (en celdas) de la cuadricula.
-    //int celda = 4;          // Tamanio de cada celda cuadrada (en pixeles).
-    int celda = 5;
-    //int termitas = 140;      // Cantidad de termitas dentro del modelo.
-    int termitas =600;      // Cantidad de termitas dentro del modelo.
+    int celda = 4;          // Tamanio de cada celda cuadrada (en pixeles).
+    int termitas = 140;      // Cantidad de termitas dentro del modelo.
     float densidad = 0.4f;   // Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
     ModeloTermitas modelo;  // El objeto que representa el modelo de termitas.
 
