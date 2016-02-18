@@ -25,8 +25,9 @@ public class Termitas extends PApplet {
     int ancho = 150;        // Anchura (en celdas) de la cuadricula.
     //int celda = 4;          // Tamanio de cada celda cuadrada (en pixeles).
     int celda = 5;
-    int termitas = 140;      // Cantidad de termitas dentro del modelo.
-    float densidad = 0.2f;   // Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
+    //int termitas = 140;      // Cantidad de termitas dentro del modelo.
+    int termitas =600;      // Cantidad de termitas dentro del modelo.
+    float densidad = 0.4f;   // Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
     ModeloTermitas modelo;  // El objeto que representa el modelo de termitas.
 
     public void settings() {
@@ -339,24 +340,55 @@ public class Termitas extends PApplet {
         int n = rnd.nextInt(2);
         
         if(n == 0){
-            if(hayAstilla(t,3)==false) this.moverTermita(t, 3);
-            else if(hayAstilla(t,5)==false) this.moverTermita(t, 5);
-            else if(hayAstilla(t,4)==false) this.moverTermita(t, 4);
-            else if(hayAstilla(t,6)==false) this.moverTermita(t, 6);
-            else if(hayAstilla(t,2)==false) this.moverTermita(t, 2);
-            else if(hayAstilla(t,7)==false) this.moverTermita(t, 7);
-            else if(hayAstilla(t,1)==false) this.moverTermita(t, 1);
-            else if(hayAstilla(t,0)==false) this.moverTermita(t, 0);
-        } else {
-            if(hayAstilla(t,7)==false) this.moverTermita(t, 7);
-            else if(hayAstilla(t,0)==false) this.moverTermita(t, 0);
-            else if(hayAstilla(t,2)==false) this.moverTermita(t, 2);
-            else if(hayAstilla(t,1)==false) this.moverTermita(t, 1);
-            else if(hayAstilla(t,3)==false) this.moverTermita(t, 3);
-            else if(hayAstilla(t,6)==false) this.moverTermita(t, 6);
-            else if(hayAstilla(t,4)==false) this.moverTermita(t, 4);
-            else if(hayAstilla(t,5)==false) this.moverTermita(t, 5);
-        }        
+            if(!hayAstilla(t,3)){
+                this.moverTermita(t, 3);
+                return;
+            }
+            else if(!hayAstilla(t,5)){
+                this.moverTermita(t, 5);
+                return;
+            }
+            else if(!hayAstilla(t,4)){
+                this.moverTermita(t, 4);
+                return;
+            }
+            else if(!hayAstilla(t,1)){
+                this.moverTermita(t, 1);
+                return;
+            }          
+        } 
+        if(!hayAstilla(t,7)){
+            this.moverTermita(t, 7);
+            return;
+        }
+        else if(!hayAstilla(t,0)){
+            this.moverTermita(t, 0);
+            return;
+        }
+        else if(!hayAstilla(t,2)){
+            this.moverTermita(t, 2);
+            return;
+        }
+        else if(!hayAstilla(t,6)){
+            this.moverTermita(t, 6);
+            return;
+        }
+        else if(!hayAstilla(t,5)){
+            this.moverTermita(t, 5);
+            return;
+        }
+        else if(!hayAstilla(t,3)){
+            this.moverTermita(t, 3);
+            return;
+        }
+        else if(!hayAstilla(t,1)){
+            this.moverTermita(t, 1);
+            return;
+        }
+        else {
+            this.moverTermita(t, 4);
+            return;
+        }
         
         // ##### IMPLEMENTACION #####
         // Hint: MArcar casilla con astilla, indicar que la termina ya no carga una astilla y asignar una nueva posicion a la termita.
