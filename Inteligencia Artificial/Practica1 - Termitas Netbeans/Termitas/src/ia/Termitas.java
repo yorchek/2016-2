@@ -354,6 +354,10 @@ public class Termitas extends PApplet {
                 this.moverTermita(t, 1);
                 return;
             }          
+            else if(!hayAstilla(t,2)){
+               this.moverTermita(t, 2);
+                return;
+            }
         } 
         if(!hayAstilla(t,7)){
             this.moverTermita(t, 7);
