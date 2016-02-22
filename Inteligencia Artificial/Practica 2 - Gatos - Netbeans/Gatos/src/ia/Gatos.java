@@ -244,12 +244,25 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
+            LinkedList<Gato> sucesores = new LinkedList<Gato>();
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 3; j++){
+                    if(this.tablero[i][j] == 0){
+                        Gato sucesor = new Gato(this);
+                        sucesor.padre = this;
+                        sucesor.jugador1 = !this.jugador1;
+                        sucesor.tiraEn(i, j);
+                        sucesores.add(sucesor);
+                    }
+                }
+            }
             // Hint: se debe verificar si el estado sigue siendo valido, si lo es, generar a sus sucesores
             // usando una lista ligada. recuerden que deben especificar que jugador jugó. No vayan a  
             // dejar sin padre a los sucesores.
-            return null;
+            this.sucesores = sucesores;
+            return sucesores;
         }
-
+        
 
         // ------- *** ------- *** -------
         // Serie de funciones que revisan la equivalencia de estados considerando las simetrías de un cuadrado.
@@ -272,7 +285,7 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-
+            
             return false;
         }
 
