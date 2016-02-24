@@ -244,29 +244,30 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            System.out.println(this);
+            //System.out.println(this);
+            //Si hay un ganador ya no lo expandimos
+            if(hayGanador) return null;
             LinkedList<Gato> sucesores = new LinkedList<Gato>();
-            if(hayGanador) return sucesores;
             for(int i = 0; i < 3; i++){
                 for(int j = 0; j < 3; j++){
+                    //verificamos que se pueda hacer la siguiente tirada (si hay casillas 'libres')
                     if(tablero[i][j] == 0){
+                        //como hay un estado sucesor valido lo creamos
                         Gato sucesor = new Gato(this);
                         sucesor.jugador1 = !this.jugador1;
                         sucesor.padre = this;
+                        //generamos el siguiente estado tirando en la casilla disponible
                         sucesor.tiraEn(j, i);
                         boolean ingresa = true;
                         for(Gato g : sucesores){
-                            if(sucesor.esSimetricoDiagonalInvertida(g) || 
-                                    sucesor.esSimetricoDiagonal(g) ||
-                                    sucesor.esSimetricoVerticalmente(g) ||
-                                    sucesor.esSimetricoHorizontalmente(g) ||
-                                    sucesor.esSimetrico90(g) ||
-                                    sucesor.esSimetrico180(g) ||
-                                    sucesor.esSimetrico270(g)){
+                            //verificamos si hay un estado equivalente con los sucesores ya creados
+                            if(sucesor.equals(g)){
+                                //si lo hay ya no lo agregamos
                                 ingresa = false;
                                 break;
                             }
                         }
+                        //si no se encontro un estado equivalente lo agregamos a los sucesores
                         if(ingresa) sucesores.add(sucesor);
                     }
                 }
@@ -299,6 +300,17 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
+            /*if(this.tablero[0][0] != otro.tablero[0][0] ||
+                    this.tablero[0][1] != otro.tablero[1][0] ||
+                    this.tablero[0][2] != otro.tablero[2][0] ||
+                    this.tablero[1][0] != otro.tablero[1][0] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[1][2] != otro.tablero[2][1] ||
+                    this.tablero[2][0] != otro.tablero[0][2] ||
+                    this.tablero[2][1] != otro.tablero[1][2] ||
+                    this.tablero[2][2] != otro.tablero[2][2])
+                return false;*/
+            //se deduce que la posicion (i,j) es simetrica a (j,i)
             for(int i = 0; i<3; i++){
                 for(int j = 0; j<3; j++){
                     if(this.tablero[i][j] != otro.tablero[j][i]) return false;
@@ -312,6 +324,17 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
+            /*if(this.tablero[0][0] != otro.tablero[2][2] ||
+                    this.tablero[0][1] != otro.tablero[1][2] ||
+                    this.tablero[0][2] != otro.tablero[0][2] ||
+                    this.tablero[1][0] != otro.tablero[2][1] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[1][2] != otro.tablero[0][1] ||
+                    this.tablero[2][0] != otro.tablero[2][0] ||
+                    this.tablero[2][1] != otro.tablero[1][0] ||
+                    this.tablero[2][2] != otro.tablero[0][0])
+                return false;*/
+            //se deduce que la posicion (i,j) es simetrica a (2-j,2-i)
             for(int i = 0; i<3; i++){
                 for(int j = 0; j<3; j++){
                     if(this.tablero[i][j] != otro.tablero[2-j][2-i]) return false;
@@ -325,21 +348,6 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            
-            for(int i = 0; i<3; i++){
-                for(int j = 0; j<3; j++){
-                    if(i == 1 && this.tablero[i][j] != otro.tablero[i][j]) return false;
-                    if(this.tablero[i][j] != otro.tablero[2-i][j]) return false;
-                }
-            }
-            return true;
-        }
-
-        /** Al reflejar el otro gato sobre la horizontal son iguales */
-        boolean esSimetricoHorizontalmente(Gato otro){
-            // -------------------------------
-            //        IMPLEMENTACION
-            // -------------------------------
             /*if(this.tablero[0][0] != otro.tablero[0][2] ||
                     this.tablero[0][1] != otro.tablero[0][1] ||
                     this.tablero[0][2] != otro.tablero[0][0] ||
@@ -350,10 +358,35 @@ public class Gatos extends PApplet {
                     this.tablero[2][1] != otro.tablero[2][1] ||
                     this.tablero[2][2] != otro.tablero[2][0])
                 return false;*/
+            //se deduce que la posicion (i,j) es simetrica a (i,2-j) cuando j != 1
             for(int i = 0; i<3; i++){
                 for(int j = 0; j<3; j++){
-                    if(j == 1 && this.tablero[i][j] != otro.tablero[i][j]) return false;
                     if(this.tablero[i][j] != otro.tablero[i][2-j]) return false;
+                }
+            }
+            return true;
+        }
+
+        /** Al reflejar el otro gato sobre la horizontal son iguales */
+        boolean esSimetricoHorizontalmente(Gato otro){
+            // -------------------------------
+            //        IMPLEMENTACION
+            // -------------------------------
+            /*if(this.tablero[0][0] != otro.tablero[2][0] ||
+                    this.tablero[0][1] != otro.tablero[2][1] ||
+                    this.tablero[0][2] != otro.tablero[2][2] ||
+                    this.tablero[1][0] != otro.tablero[1][0] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[1][2] != otro.tablero[1][2] ||
+                    this.tablero[2][0] != otro.tablero[0][0] ||
+                    this.tablero[2][1] != otro.tablero[0][1] ||
+                    this.tablero[2][2] != otro.tablero[0][2])
+                return false;*/
+            //Como los casos de [2,0][2,1]y [2,2] ya son revisados 
+            //en el caso de los ceros ya no los revisamos de nuevo i<2
+            for(int i = 0; i<2; i++){
+                for(int j = 0; j<3; j++){
+                    if(this.tablero[i][j] != otro.tablero[2-i][j]) return false;
                 }
             }
             return true;
@@ -364,19 +397,19 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            /*if(this.tablero[0][0] != otro.tablero[2][0] ||
+            /*if(this.tablero[0][0] != otro.tablero[0][2] ||
+                    this.tablero[0][1] != otro.tablero[1][2] ||
+                    this.tablero[0][2] != otro.tablero[2][2] ||
+                    this.tablero[1][0] != otro.tablero[0][1] ||
                     this.tablero[1][1] != otro.tablero[1][1] ||
-                    this.tablero[0][1] != otro.tablero[1][0] ||
-                    this.tablero[0][2] != otro.tablero[0][0] ||
-                    this.tablero[1][0] != otro.tablero[2][1] ||
-                    this.tablero[1][2] != otro.tablero[0][1] ||
-                    this.tablero[2][0] != otro.tablero[2][2] ||
-                    this.tablero[2][1] != otro.tablero[1][2] ||
-                    this.tablero[2][2] != otro.tablero[0][2])
+                    this.tablero[1][2] != otro.tablero[2][1] ||
+                    this.tablero[2][0] != otro.tablero[0][0] ||
+                    this.tablero[2][1] != otro.tablero[1][0] ||
+                    this.tablero[2][2] != otro.tablero[2][0])
                 return false;*/
-            for(int i = 0; i < 3; i++){
-                for(int j = 0; j < 3; j++){
-                    if(this.tablero[i][j] != otro.tablero[2-j][i]) return false;
+            for(int i = 0; i<3; i++){
+                for(int j = 0; j<3; j++){
+                    if(this.tablero[i][j] != otro.tablero[j][2-i]) return false;
                 }
             }
             return true;
@@ -410,19 +443,19 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            /*if(this.tablero[0][0] != otro.tablero[0][2] ||
-                    this.tablero[0][1] != otro.tablero[1][2] ||
-                    this.tablero[0][2] != otro.tablero[2][2] ||
-                    this.tablero[1][0] != otro.tablero[0][1] ||
+            /*if(this.tablero[0][0] != otro.tablero[2][0] ||
                     this.tablero[1][1] != otro.tablero[1][1] ||
-                    this.tablero[1][2] != otro.tablero[2][1] ||
-                    this.tablero[2][0] != otro.tablero[0][0] ||
-                    this.tablero[2][1] != otro.tablero[1][0] ||
-                    this.tablero[2][2] != otro.tablero[2][0])
+                    this.tablero[0][1] != otro.tablero[1][0] ||
+                    this.tablero[0][2] != otro.tablero[0][0] ||
+                    this.tablero[1][0] != otro.tablero[2][1] ||
+                    this.tablero[1][2] != otro.tablero[0][1] ||
+                    this.tablero[2][0] != otro.tablero[2][2] ||
+                    this.tablero[2][1] != otro.tablero[1][2] ||
+                    this.tablero[2][2] != otro.tablero[0][2])
                 return false;*/
-            for(int i = 0; i<3; i++){
-                for(int j = 0; j<3; j++){
-                    if(this.tablero[i][j] != otro.tablero[j][2-i]) return false;
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 3; j++){
+                    if(this.tablero[i][j] != otro.tablero[2-j][i]) return false;
                 }
             }
             return true;
