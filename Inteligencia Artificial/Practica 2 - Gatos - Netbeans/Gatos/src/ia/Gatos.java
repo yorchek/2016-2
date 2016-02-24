@@ -244,15 +244,30 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
+            System.out.println(this);
             LinkedList<Gato> sucesores = new LinkedList<Gato>();
+            if(hayGanador) return sucesores;
             for(int i = 0; i < 3; i++){
                 for(int j = 0; j < 3; j++){
-                    if(this.tablero[i][j] == 0){
+                    if(tablero[i][j] == 0){
                         Gato sucesor = new Gato(this);
-                        sucesor.padre = this;
                         sucesor.jugador1 = !this.jugador1;
-                        sucesor.tiraEn(i, j);
-                        sucesores.add(sucesor);
+                        sucesor.padre = this;
+                        sucesor.tiraEn(j, i);
+                        boolean ingresa = true;
+                        for(Gato g : sucesores){
+                            if(sucesor.esSimetricoDiagonalInvertida(g) || 
+                                    sucesor.esSimetricoDiagonal(g) ||
+                                    sucesor.esSimetricoVerticalmente(g) ||
+                                    sucesor.esSimetricoHorizontalmente(g) ||
+                                    sucesor.esSimetrico90(g) ||
+                                    sucesor.esSimetrico180(g) ||
+                                    sucesor.esSimetrico270(g)){
+                                ingresa = false;
+                                break;
+                            }
+                        }
+                        if(ingresa) sucesores.add(sucesor);
                     }
                 }
             }
@@ -262,7 +277,6 @@ public class Gatos extends PApplet {
             this.sucesores = sucesores;
             return sucesores;
         }
-        
 
         // ------- *** ------- *** -------
         // Serie de funciones que revisan la equivalencia de estados considerando las simetrías de un cuadrado.
@@ -285,8 +299,12 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            
-            return false;
+            for(int i = 0; i<3; i++){
+                for(int j = 0; j<3; j++){
+                    if(this.tablero[i][j] != otro.tablero[j][i]) return false;
+                }
+            }
+            return true;
         }
 
         /** Al reflejar el gato sobre la diagonal / son iguales (ie traspuesta) */
@@ -294,7 +312,12 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            return false;
+            for(int i = 0; i<3; i++){
+                for(int j = 0; j<3; j++){
+                    if(this.tablero[i][j] != otro.tablero[2-j][2-i]) return false;
+                }
+            }
+            return true;
         }
 
         /** Al reflejar el otro gato sobre la vertical son iguales */
@@ -302,7 +325,14 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            return false;
+            
+            for(int i = 0; i<3; i++){
+                for(int j = 0; j<3; j++){
+                    if(i == 1 && this.tablero[i][j] != otro.tablero[i][j]) return false;
+                    if(this.tablero[i][j] != otro.tablero[2-i][j]) return false;
+                }
+            }
+            return true;
         }
 
         /** Al reflejar el otro gato sobre la horizontal son iguales */
@@ -310,7 +340,23 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            return false;
+            /*if(this.tablero[0][0] != otro.tablero[0][2] ||
+                    this.tablero[0][1] != otro.tablero[0][1] ||
+                    this.tablero[0][2] != otro.tablero[0][0] ||
+                    this.tablero[1][0] != otro.tablero[1][2] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[1][2] != otro.tablero[1][0] ||
+                    this.tablero[2][0] != otro.tablero[2][2] ||
+                    this.tablero[2][1] != otro.tablero[2][1] ||
+                    this.tablero[2][2] != otro.tablero[2][0])
+                return false;*/
+            for(int i = 0; i<3; i++){
+                for(int j = 0; j<3; j++){
+                    if(j == 1 && this.tablero[i][j] != otro.tablero[i][j]) return false;
+                    if(this.tablero[i][j] != otro.tablero[i][2-j]) return false;
+                }
+            }
+            return true;
         }
 
         /** Rota el otro tablero 90° en la dirección de las manecillas del reloj. */
@@ -318,7 +364,22 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            return false;
+            /*if(this.tablero[0][0] != otro.tablero[2][0] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[0][1] != otro.tablero[1][0] ||
+                    this.tablero[0][2] != otro.tablero[0][0] ||
+                    this.tablero[1][0] != otro.tablero[2][1] ||
+                    this.tablero[1][2] != otro.tablero[0][1] ||
+                    this.tablero[2][0] != otro.tablero[2][2] ||
+                    this.tablero[2][1] != otro.tablero[1][2] ||
+                    this.tablero[2][2] != otro.tablero[0][2])
+                return false;*/
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 3; j++){
+                    if(this.tablero[i][j] != otro.tablero[2-j][i]) return false;
+                }
+            }
+            return true;
         }
 
         /** Rota el otro tablero 180° en la dirección de las manecillas del reloj. */
@@ -326,7 +387,22 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            return false;
+            /*if(this.tablero[0][0] != otro.tablero[2][2] ||
+                    this.tablero[0][1] != otro.tablero[2][1] ||
+                    this.tablero[0][2] != otro.tablero[2][0] ||
+                    this.tablero[1][0] != otro.tablero[1][2] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[1][2] != otro.tablero[1][0] ||
+                    this.tablero[2][0] != otro.tablero[0][2] ||
+                    this.tablero[2][1] != otro.tablero[0][1] ||
+                    this.tablero[2][2] != otro.tablero[0][0])
+                return false;*/
+            for(int i = 0; i < 3; i++){
+                for(int j = 0; j < 3; j++){
+                    if(this.tablero[i][j] != otro.tablero[2-i][2-j]) return false;
+                }
+            }
+            return true;
         }
 
         /** Rota el otro tablero 270° en la dirección de las manecillas del reloj. */
@@ -334,7 +410,22 @@ public class Gatos extends PApplet {
             // -------------------------------
             //        IMPLEMENTACION
             // -------------------------------
-            return false;
+            /*if(this.tablero[0][0] != otro.tablero[0][2] ||
+                    this.tablero[0][1] != otro.tablero[1][2] ||
+                    this.tablero[0][2] != otro.tablero[2][2] ||
+                    this.tablero[1][0] != otro.tablero[0][1] ||
+                    this.tablero[1][1] != otro.tablero[1][1] ||
+                    this.tablero[1][2] != otro.tablero[2][1] ||
+                    this.tablero[2][0] != otro.tablero[0][0] ||
+                    this.tablero[2][1] != otro.tablero[1][0] ||
+                    this.tablero[2][2] != otro.tablero[2][0])
+                return false;*/
+            for(int i = 0; i<3; i++){
+                for(int j = 0; j<3; j++){
+                    if(this.tablero[i][j] != otro.tablero[j][2-i]) return false;
+                }
+            }
+            return true;
         }
 
         /**
