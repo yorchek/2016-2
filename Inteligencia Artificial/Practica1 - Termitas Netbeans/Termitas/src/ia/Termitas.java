@@ -24,8 +24,8 @@ public class Termitas extends PApplet {
     int alto = 100;         // Altura (en celdas) de la cuadricula.
     int ancho = 150;        // Anchura (en celdas) de la cuadricula.
     int celda = 4;          // Tamanio de cada celda cuadrada (en pixeles).
-    int termitas = 140;      // Cantidad de termitas dentro del modelo.
-    float densidad = 0.4f;   // Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
+    int termitas = 600;      // Cantidad de termitas dentro del modelo.
+    float densidad = 0.7f;   // Proporcion de astilla en el modelo (con probabilidad de 0 a 1).
     ModeloTermitas modelo;  // El objeto que representa el modelo de termitas.
 
     public void settings() {
@@ -241,7 +241,7 @@ public class Termitas extends PApplet {
         // ##### IMPLEMENTACION #####
         //System.out.println("primero mira hacia "+ direccion);
         int ndir = rnd.nextInt(3);
-        ndir = (direccion - (ndir -1))%8;
+        ndir = (direccion + (ndir -1))%8;
         if(ndir < 0) ndir += 8;
         //System.out.println("luego mira hacia "+ ndir);
         return ndir;
@@ -339,55 +339,63 @@ public class Termitas extends PApplet {
         
         if(n == 0){
             if(!hayAstilla(t,3)){
+                t.direccion = 3;
                 this.moverTermita(t, 3);
                 return;
             }
             else if(!hayAstilla(t,5)){
+                t.direccion = 5;
                 this.moverTermita(t, 5);
                 return;
             }
             else if(!hayAstilla(t,4)){
+                t.direccion = 4;
                 this.moverTermita(t, 4);
                 return;
             }
             else if(!hayAstilla(t,1)){
+                t.direccion = 1;
                 this.moverTermita(t, 1);
-                return;
-            }          
-            else if(!hayAstilla(t,2)){
-               this.moverTermita(t, 2);
                 return;
             }
         } 
         if(!hayAstilla(t,7)){
+            t.direccion = 7;
             this.moverTermita(t, 7);
             return;
         }
         else if(!hayAstilla(t,0)){
+            t.direccion = 0;
             this.moverTermita(t, 0);
             return;
         }
         else if(!hayAstilla(t,2)){
+            t.direccion = 2;
             this.moverTermita(t, 2);
             return;
         }
         else if(!hayAstilla(t,6)){
+            t.direccion = 6;
             this.moverTermita(t, 6);
             return;
         }
         else if(!hayAstilla(t,5)){
+            t.direccion = 5;
             this.moverTermita(t, 5);
             return;
         }
         else if(!hayAstilla(t,3)){
+            t.direccion = 3;
             this.moverTermita(t, 3);
             return;
         }
         else if(!hayAstilla(t,1)){
+            t.direccion = 1;
             this.moverTermita(t, 1);
             return;
         }
-        else {
+        else{
+            t.direccion = 4;
             this.moverTermita(t, 4);
             return;
         }

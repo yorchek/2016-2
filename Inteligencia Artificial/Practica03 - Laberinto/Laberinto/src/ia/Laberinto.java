@@ -22,8 +22,8 @@ public class Laberinto extends PApplet {
     PFont fuente;  // Fuente para mostrar texto en pantalla
     
     // Propiedades del modelo de termitas.
-    int alto = 11;         // Altura (en celdas) de la cuadricula.
-    int ancho = 11;        // Anchura (en celdas) de la cuadricula.
+    int alto = 10;         // Altura (en celdas) de la cuadricula.
+    int ancho = 21;        // Anchura (en celdas) de la cuadricula.
     int celda = 20;          // Tamanio de cada celda cuadrada (en pixeles).
     ModeloLaberinto modelo;  // El objeto que representa el modelo de termitas.
 
@@ -155,8 +155,8 @@ public class Laberinto extends PApplet {
           for(int j = 0; j < ancho; j++)
             mundo[i][j] = new Celda(i,j);
         // Colocamos al 'agente' en una posicion aleatoria
-        this.posX = rnd.nextInt(alto);
-        this.posY = rnd.nextInt(ancho);
+        this.posX = rnd.nextInt(ancho);
+        this.posY = rnd.nextInt(alto);
       }
 
       /*
