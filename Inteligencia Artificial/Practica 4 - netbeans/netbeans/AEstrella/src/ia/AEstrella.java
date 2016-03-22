@@ -187,10 +187,12 @@ public class AEstrella extends PApplet {
             * HINT: calculen la distancia de este mosaico hacia el mosaico meta y luego multipliquenlo por 10
             * para que el valor sea significativo. tampoco deberia haber valores negativos
             */
+            //tomamos la diferencia entre columnas y renglones con respecto al nodo final
             int distX = meta.columna - columna;
             int distY = meta.renglon - renglon;
             if(distX<0) distX *= -1;
             if(distY<0) distY *= -1;
+            //lo multiplicamos por 10
             hn = (distX + distY) * 10;
         }
 
@@ -344,56 +346,90 @@ public class AEstrella extends PApplet {
               * nodo final, si no lo es hay que generar sus sucesores, verificar en que lista se encuentra y tomar
               * la accion correspondiente.
               */
+            //variable auxiliar para saber cuando ya encontro el camino
             boolean hay = false;
             try{
+                //verifica si ya es el estado final o el nodo esta en el camino
                 hay = nodoActual.estado.equals(this.estadoFinal) || nodoActual.estado.situacion == Situacion.EN_SOLUCION;
             } catch(Exception e){
                 
             }
             if(hay){
+                //si es padre de alguien que esta en el camino
+                //le decimos que esta en la solucion
                 nodoActual.estado.situacion = Situacion.EN_SOLUCION;
                 try{
+                    //si hay padre le decimos que debe estar en la solucion
                     nodoActual.padre.estado.situacion = Situacion.EN_SOLUCION;
                     nodoActual = nodoActual.padre;
                 } catch (Exception e){
+                    //si es el nodo inicial no tiene padre y avisamos
                     System.out.println("es el estado inicial (ya acabo)");
                 }
             } else{
-                nodoActual = listaAbierta.poll();
+                //si no hay solucion sacamos al primero de la cola
+                nodoActual = listaAbierta.poll();                
+                
+                //verificamos que no este en la lista cerrada
                 while(listaCerrada.containsValue(nodoActual.estado)){
+                    //si esta en la lista cerrada sacamos hasta encontrar uno que no este
                     nodoActual = listaAbierta.poll();
                 }
+                
+                //actualizamos al nodo actual
+                nodoActual.estado.situacion = Situacion.ACTUAL;
+                
+                //al nodo anterior lo metemos a la lista cerrada
                 nodoPrevio.estado.situacion = Situacion.EN_LISTA_CERRADA;
                 listaCerrada.put(nodoPrevio.estado, nodoPrevio.estado);
-                nodoActual.estado.situacion = Situacion.ACTUAL;
+                
                 //System.out.println("no es estado final");
+                //sacamos los sucesores del nodoActual
                 for(NodoBusqueda nodo : nodoActual.getSucesores()){
+                    //verificamos si el sucesor esta en la lista cerrada
                     if(!listaCerrada.containsValue(nodo.estado)){
+                        
+                        //si noesta en la lista cerrada le decimos que puede estar en la lista cerrada
                         nodo.estado.situacion = Situacion.EN_LISTA_ABIERTA;
+                        
+                        //variable auxiliar para saber si esta en la lista abierta
                         boolean esta = false;
                         for(NodoBusqueda n : listaAbierta){
+                            //Buscamos en la lista abierta
+                            
                             if(n.equals(nodo)){
+                                //Sí esta en la lista cerrada
                                 //System.out.println("Ya esta en la lista abierta");
+                                
                                 if(n.compareTo(nodo) >= 0){
+                                    //Es mejor opción que el que estaba
                                     //System.out.println("El nuevo nodo es mejor opcion");
+                                    
+                                    //Borramos al anterior
                                     listaAbierta.remove(n);
+                                    //Actualizamos sus valores
                                     nodo.estado.gn = nodo.gn;
                                     nodo.estado.calculaHeuristica(estadoFinal);
+                                    //Lo agregamos a la lista cerrada
                                     listaAbierta.offer(nodo);
                                 }
                                 esta = true;
+                                //como lo encontramos ya no lo seguimos buscando
                                 break;
                             }
                         }
                         if(!esta){
                             //System.out.println("No esta en ninguna lista");
+                            //lo inicializamos
                             nodo.estado.gn = nodo.gn;
                             nodo.estado.calculaHeuristica(estadoFinal);
+                            //Lo agregamos a la lista abierta
                             listaAbierta.offer(nodo);
                             //System.out.println("se agrega sucesor");
                         }
                     }
                 }
+                //el nodo previo sera el que acamos de revisar
                 nodoPrevio = nodoActual;
                 //System.out.println("actualizamos nodo previo");
             }
