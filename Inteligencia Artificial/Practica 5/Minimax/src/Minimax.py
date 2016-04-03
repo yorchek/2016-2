@@ -3,12 +3,8 @@ import sys, ast, copy
 from decimal import Decimal
 from operator import itemgetter
 
-print ' '
-print 'Estado de entrada:'
-print ' '
-
 # Tomamos el estado pasado como parámetro
-inputList = ast.literal_eval( sys.argv[1])
+inputList = []
 
 # variable auxiliar para saber si es estado final
 gb = 0
@@ -191,19 +187,25 @@ def min_valor(estado, profundidad, marca):
 	#print opcion
 	return v
 
-pinta(inputList)
-print ' '
-sig = esValido(inputList)
-gano = hayGanador(inputList)
-if sig:
-	if gano:
-		print 'Ya hay ganador (%s) no hay opciones' % gano
+try:
+	inputList = ast.literal_eval(sys.argv[1])
+	sig = esValido(inputList)
+	gano = hayGanador(inputList)
 	if sig:
-		max_valor(inputList, 0, sig)
-		print 'Estado mejor opcion para ' + sig + ':'
+		print '\nEstado de entrada:\n'
+		pinta(inputList)
 		print ' '
-		pinta(opcion)
+		if gano:
+			print 'Ya hay ganador (%s), no hay opciones' % gano
+		elif sig != 'F':
+			max_valor(inputList, 0, sig)
+			print 'Estado mejor opcion para ' + sig + ':\n'
+			pinta(opcion)
+		else:
+			print "Es un estado final, no hay opciones"
 	else:
-		print "Es un estado final"
-else:
-	print 'No es un estado valido'
+		print '\nNo es un estado valido, ejemplo:\n'
+		print '''"[['_', '_', 'X'], ['_', '_', 'O'],['X', 'O', 'X']]"\n'''
+except Exception, e:
+	print '\nSe esperaba como parámetro el estado valido de un gato\nEjemplo:\n'
+	print '''python Minimax.py  "[['_', '_', 'X'], ['_', '_', 'O'],['X', 'O', 'X']]"\n'''
