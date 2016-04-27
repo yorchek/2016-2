@@ -1,0 +1,78 @@
+;; Templates
+(deftemplate goal
+    (slot move)
+    (slot on-top-of))
+
+;; Mete un cubo, que estpa sobre el piso y está en el tope de la pila que lo contiene, en otra pila
+(defrule push-value
+    ?goal <- (goal (move ?block1) (on-top-of ?block2))
+
+    (block ?block1)
+    (block ?block2)
+
+    ?stack1 <- (stack ?block1 floor)
+    ?stack2 <- (stack ?block2 $?rest2)
+
+    =>
+
+    (retract ?goal ?stack1 ?stack2)
+
+    (assert (stack ?block1 ?block2 $?rest2))
+
+    (printout t ?block1 " pushed on top of " ?block2 crlf))
+
+;; Saca un cubo de una pila
+;; El cubo que va a ser puesto sobre otro está en el piso y no tiene cubos encima
+;; 
+(defrule pop-value-izq
+
+  ?goal <- (goal (move ?block1) (on-top-of ?block2))
+
+  (block ?block1)
+  (block ?block2)
+
+  ?stack1 <- (stack ?head $?before ?block1 $?rest1)
+  ?stack2 <- (stack ?block2 $?rest2)
+
+  =>
+
+  (retract ?stack1 ?stack2)
+
+  (assert (stack $?before ?block1 ?rest1)
+          (stack ?head floor)
+          (stack ?block2 $?rest2))
+
+  (printout t "Popping value " ?head crlf))
+  
+;; Saca un cubo de una pila
+;; El cubo sobre el cual se va a colocar otro no está en el tope de la pila
+;; sacamos los cubos que están encima de este
+;; y los colocamos sobre el piso
+(defrule pop-value-der
+
+  ?goal <- (goal (move ?block1) (on-top-of ?block2))
+
+  (block ?block1)
+  (block ?block2)
+
+  ?stack2 <- (stack ?head $?before1 ?block2 $?rest2)
+  ?stack1 <- (stack $?before2 ?block1 $?rest1)
+
+  =>
+
+  (retract ?stack1 ?stack2)
+
+  (assert (stack $?before2 ?block2 ?rest2)
+          (stack ?head floor)
+          (stack $?before1 ?block1 $?rest1))
+
+  (printout t "Popping value " ?head crlf))
+
+(deffacts initial-state
+    (block A) (block B)
+    (block C) (block D)
+    (block E) (block F)
+    (stack A B C floor)
+    (stack D E F floor)
+    (goal (move C) (on-top-of E))
+)
